@@ -1,6 +1,7 @@
 import { Stripe } from 'stripe';
-import ButtonCheckout from '../components/ButtonCheckout';
-import Navbar from  '../components/Navbar'; // Importa el componente Navbar
+// import ButtonCheckout from '../components/ButtonCheckout';
+import Navbar from  '../components/Navbar'; 
+import ButtonCar from "../components/ButtonCar";
 
 async function loadPrices() {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -11,23 +12,20 @@ async function loadPrices() {
     // Mapear los precios y filtrar solo los productos activos
     const pricesWithProductNames = await Promise.all(
         pricesData.data.map(async (price) => {
-            // Obtener detalles del producto
             const product = await stripe.products.retrieve(price.product);
-            // Solo incluir productos que están activos
             if (product.active) {
                 return {
                     id: price.id,
                     unit_amount: price.unit_amount,
                     currency: price.currency,
                     productName: product.name,
-                    productImage: product.images[0] || '', // Usa la primera imagen si está disponible
+                    productImage: product.images[0] || '',
                 };
             }
-            return null; // Ignorar productos archivados
+            return null;
         })
     );
 
-    // Filtrar los elementos nulos
     return pricesWithProductNames.filter(price => price !== null);
 }
 
@@ -36,7 +34,7 @@ const PricingPage = async () => {
 
     return (
         <div>
-            <Navbar /> {/* Barra de navegación arriba */}
+            <Navbar />
             <div className="flex justify-center items-center h-screen">
                 <div>
                     <header><h1 className="text-center my-5">TIENDA DEPORTIVA BARBOSA</h1></header>
@@ -51,7 +49,13 @@ const PricingPage = async () => {
                                     <h2 className="text-3xl font-bold mb-4">
                                         Precio: {(price.unit_amount / 100).toFixed(2)} {price.currency.toUpperCase()}
                                     </h2>
-                                    <ButtonCheckout priceId={price.id} />
+                                    {/* Pasar el producto como prop a ButtonCar */}
+                                    <ButtonCar product={{
+                                        id: price.id,
+                                        name: price.productName,
+                                        price: (price.unit_amount / 100).toFixed(2),
+                                        currency: price.currency,
+                                    }} />
                                 </div>
                             ))
                         }
