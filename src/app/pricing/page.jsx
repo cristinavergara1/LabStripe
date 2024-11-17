@@ -1,5 +1,6 @@
 import { Stripe } from 'stripe';
 import ButtonCheckout from '../components/ButtonCheckout';
+import Navbar from  '../components/Navbar'; // Importa el componente Navbar
 
 async function loadPrices() {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -30,29 +31,31 @@ async function loadPrices() {
     return pricesWithProductNames.filter(price => price !== null);
 }
 
-async function PricingPage() {
-    // Llamar a loadPrices para obtener los precios con los nombres y fotos de los productos
+const PricingPage = async () => {
     const prices = await loadPrices();
 
     return (
-        <div className="flex justify-center items-center h-screen">
-            <div>
-                <header><h1 className="text-center my-5">TIENDA DEPORTIVA BARBOSA</h1></header>
-                <div className="flex gap-x-2">
-                    {
-                        prices.map(price => (
-                            <div key={price.id} className="bg-slate-300 mb-2 p-4">
-                                <h3 className="text-xl font-semibold mb-2">{price.productName}</h3>
-                                {price.productImage && (
-                                    <img src={price.productImage} alt={price.productName} className="w-full h-40 object-cover mb-2" />
-                                )}
-                                <h2 className="text-3xl font-bold mb-4">
-                                    Precio: {(price.unit_amount / 100).toFixed(2)} {price.currency.toUpperCase()}
-                                </h2>
-                                <ButtonCheckout priceId={price.id} />
-                            </div>
-                        ))
-                    }
+        <div>
+            <Navbar /> {/* Barra de navegación arriba */}
+            <div className="flex justify-center items-center h-screen">
+                <div>
+                    <header><h1 className="text-center my-5">TIENDA DEPORTIVA BARBOSA</h1></header>
+                    <div className="flex gap-x-2">
+                        {
+                            prices.map(price => (
+                                <div key={price.id} className="bg-slate-300 mb-2 p-4">
+                                    <h3 className="text-xl font-semibold mb-2">{price.productName}</h3>
+                                    {price.productImage && (
+                                        <img src={price.productImage} alt={price.productName} className="w-full h-40 object-cover mb-2" />
+                                    )}
+                                    <h2 className="text-3xl font-bold mb-4">
+                                        Precio: {(price.unit_amount / 100).toFixed(2)} {price.currency.toUpperCase()}
+                                    </h2>
+                                    <ButtonCheckout priceId={price.id} />
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
         </div>
