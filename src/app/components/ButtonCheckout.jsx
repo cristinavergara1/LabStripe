@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-function ButtonCheckout({priceId}) {
+function ButtonCheckout({ cartItems }) {
   return (
-    <button className="bg-sky-500 text-white px-4 py-2 rounded"
-        onClick={async()=>{
-            const res = await fetch('/api/checkout',{
-                method: 'POST',
-                body: JSON.stringify({
-                    priceId
-                }),
-                headers:{
-                    'Content-Type': 'application/json'
-                }
-
+    <button
+      className="bg-sky-500 text-white px-4 py-2 rounded"
+      onClick={async () => {
+        // Enviar los artículos del carrito al servidor para crear la sesión de pago
+        const res = await fetch('/api/checkout', {
+          method: 'POST',
+          body: JSON.stringify({ cartItems }), // Mandamos todos los artículos del carrito
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
+
         const data = await res.json();
-        window.location.href=data.url
-     //   console.log(data);
 
-
-        }}>
-            Buy
-        </button>
+        // Redirigir a la página de Stripe Checkout
+        window.location.href = data.url;
+      }}
+    >
+      Pagar
+    </button>
   );
 }
 
-export default ButtonCheckout
+export default ButtonCheckout;
