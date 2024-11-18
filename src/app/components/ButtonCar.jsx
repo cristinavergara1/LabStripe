@@ -1,31 +1,23 @@
+// ButtonCar.jsx
 "use client";
-import React from "react";
+import React from 'react';
 
 const ButtonCar = ({ product }) => {
-    const addToCart = () => {
-       
-        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-
-        const existingProductIndex = storedCart.findIndex((item) => item.id === product.id);
-
-        if (existingProductIndex >= 0) {
-            storedCart[existingProductIndex].quantity += 1;
-        } else {
-            storedCart.push({ ...product, quantity: 1 });
-        }
-
-   
-        localStorage.setItem("cart", JSON.stringify(storedCart));
-
-
-        alert(`${product.name} agregado al carrito!`);
+    const handleAddToCart = () => {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        
+        // Verifica que unit_amount sea un número válido antes de guardar el producto
+        const validatedProduct = {
+            ...product,
+            unit_amount: product.unit_amount || 0, // Si falta el precio, coloca un valor predeterminado
+        };
+        
+        cart.push(validatedProduct);
+        localStorage.setItem("cart", JSON.stringify(cart));
     };
 
     return (
-        <button 
-            onClick={addToCart} 
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
+        <button onClick={handleAddToCart} className="bg-blue-500 text-white py-2 px-4 rounded">
             Agregar al carrito
         </button>
     );
