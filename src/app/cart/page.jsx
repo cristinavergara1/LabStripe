@@ -18,9 +18,19 @@ const CartPage = () => {
 
     return (
         <div className="container mx-auto py-10">
-            <h1 className="text-3xl font-bold mb-5">Carrito de Compras</h1>
-            {cartItems.length === 0 ? (
-                <p>Tu carrito está vacío.</p>
+        <h1 className="text-3xl font-bold mb-5">Carrito de Compras</h1>
+    {cartItems.length === 0 ? (
+        <div>
+            <p>Tu carrito está vacío.</p>
+            <button 
+                onClick={() => window.location.href = '/pricing'} 
+                className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+            >
+                Ir a la tienda
+            </button>
+        </div>
+
+            
             ) : (
                 <div>
                     {cartItems.map((item, index) => (
