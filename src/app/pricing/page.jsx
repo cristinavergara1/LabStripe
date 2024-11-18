@@ -50,12 +50,13 @@ const PricingPage = async () => {
                                         Precio: {(price.unit_amount / 100).toFixed(2)} {price.currency.toUpperCase()}
                                     </h2>
                                     {/* Pasar el producto como prop a ButtonCar */}
-                                    <ButtonCar product={{
-                                        id: price.id,
-                                        name: price.productName,
-                                        price: (price.unit_amount / 100).toFixed(2),
-                                        currency: price.currency,
-                                    }} />
+                                    <ButtonCar product={{ 
+    productName: price.productName, 
+    unit_amount: price.unit_amount, 
+    currency: price.currency, 
+    productImage: price.productImage 
+}} />
+
                                 </div>
                             ))
                         }
