@@ -1,7 +1,8 @@
-// CartPage.jsx
 "use client";
 import React, { useEffect, useState } from 'react';
 import ButtonCheckout from '../components/ButtonCheckout';
+import { FiArrowLeft } from "react-icons/fi";
+
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -23,45 +24,53 @@ const CartPage = () => {
     };
 
     return (
-        <div className="container mx-auto py-10">
-            <h1 className="text-3xl font-bold mb-5">Carrito de Compras</h1>
+        <div className="container mx-auto py-10 px-4 lg:px-0">
+            <h1 className="text-4xl font-extrabold mb-8 text-center text-gray-800">Carrito de Compras</h1>
             {cartItems.length === 0 ? (
-                <div>
-                    <p>Tu carrito está vacío.</p>
+                <div className="text-center">
+                    <p className="text-lg text-gray-600">Tu carrito está vacío.</p>
                     <button 
                         onClick={() => window.location.href = '/pricing'} 
-                        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+                        className="bg-blue-500 text-white px-6 py-3 rounded mt-6 hover:bg-blue-600 transition-colors"
                     >
                         Ir a la tienda
                     </button>
                 </div>
             ) : (
-                <div>
+                <div className="bg-white rounded-lg shadow-lg p-6">
                     {cartItems.map((item, index) => (
-                        <div key={index} className="border-b py-3">
-                            <h2 className="text-xl">{item.productName}</h2>
-                            <p className="text-lg">
-                                Precio: {(item.unit_amount && !isNaN(item.unit_amount) ? (item.unit_amount / 100).toFixed(2) : "0.00")} {item.currency?.toUpperCase() || ''}
-                            </p>
-                            {item.productImage && (
-                                <img src={item.productImage} alt={item.productName} className="w-24 h-24 object-cover my-2" />
-                            )}
+                        <div key={index} className="flex items-center border-b py-4 space-x-4">
+                            <img src={item.productImage} alt={item.productName} className="w-24 h-24 object-cover rounded" />
+                            <div className="flex-1">
+                                <h2 className="text-2xl font-semibold text-gray-700">{item.productName}</h2>
+                                <p className="text-lg text-gray-600">
+                                    Precio: ${(item.unit_amount && !isNaN(item.unit_amount) ? (item.unit_amount / 100).toFixed(2) : "0.00")} {item.currency?.toUpperCase() || ''}
+                                </p>
+                            </div>
                         </div>
                     ))}
-                    
+
                     {/* Mostrar el total del carrito */}
-                    <div className="text-xl font-semibold mt-5">
-                        Total: {totalAmount.toFixed(2)} USD
+                    <div className="text-2xl font-semibold mt-6 text-right text-gray-800">
+                        Total: ${totalAmount.toFixed(2)} USD
                     </div>
 
-                    <div className="mt-5">
+                    <div className="flex justify-end space-x-4 mt-6">
                         <ButtonCheckout cartItems={cartItems} />
                         <button 
                             onClick={handleClearCart}
-                            className="bg-red-600 text-white py-2 px-4 rounded ml-4"
+                            className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors"
                         >
                             Vaciar carrito
                         </button>
+                        <button 
+                        onClick={() => window.location.href = '/pricing'} 
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors flex items-center"
+>
+                       <FiArrowLeft className="mr-2" /> {/* Esto agrega el ícono de flecha */}
+                       Volver a la tienda
+                       </button>
+
                     </div>
                 </div>
             )}
